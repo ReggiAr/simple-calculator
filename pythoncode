@@ -1,0 +1,68 @@
+#Created By Reggi Aryunadi
+#25 April 2023
+#github.com/Reggi Ar
+#reggi.aryunadi@gmail.com
+
+from PyQt5.QtWidgets import QApplication, QPushButton, QLineEdit, QWidget
+import sys
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QLineEdit
+
+class Calculator(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Simple Calculator")
+        self.setGeometry(300, 300, 300, 300)
+        self.setStyleSheet("background-color:#F5E1E1;")
+
+        # Membuat tampilan layar
+        self.display = QLineEdit()
+        self.display.setReadOnly(True)
+        self.display.setStyleSheet("background-color:black; color:white;")
+        self.display.setFont(QFont("Helvetica",15))
+
+        # Membuat tombol
+        self.buttons = [
+            ['7', '8', '9', '/'],
+            ['4', '5', '6', '*'],
+            ['1', '2', '3', '-'],
+            ['0', '.', '=', '+']
+        ]
+        
+
+        # Membuat layout menggunakan QGridLayout
+        layout = QGridLayout()
+        layout.addWidget(self.display, 0, 0, 1, 4)
+
+        # Menambahkan tombol pada layout
+        for row in range(4):
+            for col in range(4):
+                button = QPushButton(self.buttons[row][col])
+                button.setStyleSheet("background-color: #8AC6A7")
+                layout.addWidget(button, row + 1, col)
+                button.clicked.connect(self.button_clicked)
+        self.setLayout(layout)
+
+    def button_clicked(self):
+        button = self.sender()
+        current_text = self.display.text()
+        button_text = button.text()
+
+        if button_text == '=':
+            try:
+                result = eval(current_text)
+                self.display.setText(str(result))
+            except Exception as e:
+                self.display.setText("Error")
+        else:
+            self.display.setText(current_text + button_text)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    calculator = Calculator()
+    calculator.show()
+    sys.exit(app.exec_())
